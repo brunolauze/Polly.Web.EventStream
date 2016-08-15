@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Hystrix Dashboard</title>
+<title>Polly Dashboard</title>
 
 	<!-- Our custom CSS -->
 	<link rel="stylesheet" type="text/css" href="./index.css" />
@@ -34,7 +34,7 @@
 		}
 		function monitorStreams() {
 			if (streams.length) {
-				location.href= './monitor/monitor.html?streams=' + encodeURIComponent(JSON.stringify(streams));
+				location.href= './monitor.html?streams=' + encodeURIComponent(JSON.stringify(streams));
 			} else {
 				$('#message').html("Add Streams to monitor, before starting to monitor.");
 			}
@@ -89,7 +89,7 @@
 	<br>
 	<br>
 	
-	<h2>Hystrix Dashboard</h2>
+	<h2>Polly Dashboard</h2>
 	
 	Eureka URL: <input id="eurekaURL" name="eurekaURL" class="eurekaURL" type="text" size="42" placeholder="http://hostname:8080/eureka/v2/apps"> <br>
 
@@ -99,7 +99,7 @@
 	</select> 
 
 	Stream Type:
-	Hystrix <input type="radio" name="streamType" value="hystrix.stream"> 
+    Polly <input type="radio" name="streamType" value="polly.stream"> 
 	Turbine <input type="radio" name="streamType" value="turbine.stream" checked> <br><br>
 
 	<input id="stream" type="textfield" size="120" placeholder="http://hostname:port/turbine/turbine.stream"></input>
@@ -108,11 +108,11 @@
 	<br>
 	<i>Cluster via Turbine (custom cluster):</i> http://turbine-hostname:port/turbine.stream?cluster=[clusterName]
 	<br>
-	<i>Single Hystrix App:</i> http://hystrix-app:port/hystrix.stream
+	<i>Single Polly App:</i> http://polly-app:port/polly.stream
 	<br><br>
 	Delay: <input id="delay" type="textfield" size="10" placeholder="2000"></input>ms 
 	&nbsp;&nbsp;&nbsp;&nbsp; 
-	Title: <input id="title" type="textfield" size="60" placeholder="Example Hystrix App"></input><br><br>
+	Title: <input id="title" type="textfield" size="60" placeholder="Example Polly App"></input><br><br>
     Authorization: <input id="authorization" type="textfield" size="60" placeholder="Basic Zm9vOmJhcg=="></input><br>
 	<br>
 	<button onclick="addStream()">Add Stream</button>

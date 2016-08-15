@@ -2,10 +2,10 @@
 (function(window) {
 
 	// cache the templates we use on this page as global variables (asynchronously)
-	jQuery.get(getRelativePath("../components/hystrixCommand/templates/hystrixCircuit.html"), function(data) {
+	jQuery.get(getRelativePath("./components/hystrixCircuit.html"), function (data) {
 		hystrixTemplateCircuit = data;
 	});
-	jQuery.get(getRelativePath("../components/hystrixCommand/templates/hystrixCircuitContainer.html"), function(data) {
+	jQuery.get(getRelativePath("./components/hystrixCircuitContainer.html"), function(data) {
 		hystrixTemplateCircuitContainer = data;
 	});
 
@@ -115,7 +115,7 @@
 		function convertAllAvg(data) {
 			convertAvg(data, "errorPercentage", true);
 			convertAvg(data, "latencyExecute_mean", false);
-        }
+		}
 		
 		function convertAvg(data, key, decimal) {
 			if (decimal) {
@@ -142,47 +142,47 @@
 			}
 			data["ratePerSecond"] =  roundNumber(totalRequests / numberSeconds);
 			data["ratePerSecondPerHost"] =  roundNumber(totalRequests / numberSeconds / data["reportingHosts"]) ;
-	    }
+		}
 
 		function validateData(data) {
 			assertNotNull(data,"reportingHosts");
-            assertNotNull(data,"type");
-            assertNotNull(data,"name");
-            assertNotNull(data,"group");
-            // assertNotNull(data,"currentTime");
-            assertNotNull(data,"isCircuitBreakerOpen");
-            assertNotNull(data,"errorPercentage");
-            assertNotNull(data,"errorCount");
-            assertNotNull(data,"requestCount");
-            assertNotNull(data,"rollingCountCollapsedRequests");
-            assertNotNull(data,"rollingCountExceptionsThrown");
-            assertNotNull(data,"rollingCountFailure");
-            assertNotNull(data,"rollingCountFallbackFailure");
-            assertNotNull(data,"rollingCountFallbackRejection");
-            assertNotNull(data,"rollingCountFallbackSuccess");
-            assertNotNull(data,"rollingCountResponsesFromCache");
-            assertNotNull(data,"rollingCountSemaphoreRejected");
-            assertNotNull(data,"rollingCountShortCircuited");
-            assertNotNull(data,"rollingCountSuccess");
-            assertNotNull(data,"rollingCountThreadPoolRejected");
-            assertNotNull(data,"rollingCountTimeout");
-            assertNotNull(data,"rollingCountBadRequests");
-            assertNotNull(data,"currentConcurrentExecutionCount");
-            assertNotNull(data,"latencyExecute_mean");
-            assertNotNull(data,"latencyExecute");
-            assertNotNull(data,"propertyValue_circuitBreakerRequestVolumeThreshold");
-            assertNotNull(data,"propertyValue_circuitBreakerSleepWindowInMilliseconds");
-            assertNotNull(data,"propertyValue_circuitBreakerErrorThresholdPercentage");
-            assertNotNull(data,"propertyValue_circuitBreakerForceOpen");
-            assertNotNull(data,"propertyValue_executionIsolationStrategy");
-            assertNotNull(data,"propertyValue_executionIsolationThreadTimeoutInMilliseconds");
-            assertNotNull(data,"propertyValue_executionIsolationThreadInterruptOnTimeout");
-            // assertNotNull(data,"propertyValue_executionIsolationThreadPoolKeyOverride");
-            assertNotNull(data,"propertyValue_executionIsolationSemaphoreMaxConcurrentRequests");
-            assertNotNull(data,"propertyValue_fallbackIsolationSemaphoreMaxConcurrentRequests");
-            assertNotNull(data,"propertyValue_requestCacheEnabled");
-            assertNotNull(data,"propertyValue_requestLogEnabled");
-            assertNotNull(data,"propertyValue_metricsRollingStatisticalWindowInMilliseconds");
+			assertNotNull(data,"type");
+			assertNotNull(data,"name");
+			assertNotNull(data,"group");
+			// assertNotNull(data,"currentTime");
+			assertNotNull(data,"isCircuitBreakerOpen");
+			assertNotNull(data,"errorPercentage");
+			assertNotNull(data,"errorCount");
+			assertNotNull(data,"requestCount");
+			assertNotNull(data,"rollingCountCollapsedRequests");
+			assertNotNull(data,"rollingCountExceptionsThrown");
+			assertNotNull(data,"rollingCountFailure");
+			assertNotNull(data,"rollingCountFallbackFailure");
+			assertNotNull(data,"rollingCountFallbackRejection");
+			assertNotNull(data,"rollingCountFallbackSuccess");
+			assertNotNull(data,"rollingCountResponsesFromCache");
+			assertNotNull(data,"rollingCountSemaphoreRejected");
+			assertNotNull(data,"rollingCountShortCircuited");
+			assertNotNull(data,"rollingCountSuccess");
+			assertNotNull(data,"rollingCountThreadPoolRejected");
+			assertNotNull(data,"rollingCountTimeout");
+			assertNotNull(data,"rollingCountBadRequests");
+			assertNotNull(data,"currentConcurrentExecutionCount");
+			assertNotNull(data,"latencyExecute_mean");
+			assertNotNull(data,"latencyExecute");
+			assertNotNull(data,"propertyValue_circuitBreakerRequestVolumeThreshold");
+			assertNotNull(data,"propertyValue_circuitBreakerSleepWindowInMilliseconds");
+			assertNotNull(data,"propertyValue_circuitBreakerErrorThresholdPercentage");
+			assertNotNull(data,"propertyValue_circuitBreakerForceOpen");
+			assertNotNull(data,"propertyValue_executionIsolationStrategy");
+			assertNotNull(data,"propertyValue_executionIsolationThreadTimeoutInMilliseconds");
+			assertNotNull(data,"propertyValue_executionIsolationThreadInterruptOnTimeout");
+			// assertNotNull(data,"propertyValue_executionIsolationThreadPoolKeyOverride");
+			assertNotNull(data,"propertyValue_executionIsolationSemaphoreMaxConcurrentRequests");
+			assertNotNull(data,"propertyValue_fallbackIsolationSemaphoreMaxConcurrentRequests");
+			assertNotNull(data,"propertyValue_requestCacheEnabled");
+			assertNotNull(data,"propertyValue_requestLogEnabled");
+			assertNotNull(data,"propertyValue_metricsRollingStatisticalWindowInMilliseconds");
 		}
 		
 		function assertNotNull(data, key) {
@@ -532,7 +532,7 @@
 	  x2 = x.length > 1 ? '.' + x[1] : '';
 	  var rgx = /(\d+)(\d{3})/;
 	  while (rgx.test(x1)) {
-	    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	  }
 	  return x1 + x2;
 	}

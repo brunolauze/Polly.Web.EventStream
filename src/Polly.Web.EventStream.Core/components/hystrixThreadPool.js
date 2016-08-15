@@ -2,10 +2,10 @@
 (function(window) {
 
 	// cache the templates we use on this page as global variables (asynchronously)
-	jQuery.get(getRelativePath("../components/hystrixThreadPool/templates/hystrixThreadPool.html"), function(data) {
+	jQuery.get(getRelativePath("./components/hystrixThreadPool.html"), function (data) {
 		htmlTemplate = data;
 	});
-	jQuery.get(getRelativePath("../components/hystrixThreadPool/templates/hystrixThreadPoolContainer.html"), function(data) {
+	jQuery.get(getRelativePath("./components/hystrixThreadPoolContainer.html"), function (data) {
 		htmlTemplateContainer = data;
 	});
 
@@ -115,7 +115,7 @@
 			}
 			data["ratePerSecond"] =  roundNumber(totalThreadsExecuted / numberSeconds);
 			data["ratePerSecondPerHost"] =  roundNumber(totalThreadsExecuted / numberSeconds / data["reportingHosts"]);
-	    }
+		}
 
 		function validateData(data) {
 			
@@ -134,7 +134,7 @@
 			assertNotNull(data,"rollingMaxActiveThreads");
 			assertNotNull(data,"reportingHosts");
 
-            assertNotNull(data,"propertyValue_queueSizeRejectionThreshold");
+			assertNotNull(data,"propertyValue_queueSizeRejectionThreshold");
 			assertNotNull(data,"propertyValue_metricsRollingStatisticalWindowInMilliseconds");
 		}
 		
@@ -339,7 +339,7 @@
 	  x2 = x.length > 1 ? '.' + x[1] : '';
 	  var rgx = /(\d+)(\d{3})/;
 	  while (rgx.test(x1)) {
-	    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	  }
 	  return x1 + x2;
 	}

@@ -1,32 +1,32 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Hystrix Monitor</title>
+	<title>Polly Monitor</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 	<!-- Setup base for everything -->
-	<link rel="stylesheet" type="text/css" href="../css/global.css" />
+	<link rel="stylesheet" type="text/css" href="./css/global.css" />
 	
 	<!-- Our custom CSS -->
 	<link rel="stylesheet" type="text/css" href="./monitor.css" />
 
 	<!-- d3 -->
-	<script type="text/javascript" src="../js/d3.v2.min.js"></script>
+	<script type="text/javascript" src="./js/d3.v2.min.js"></script>
 	
 	<!-- Javascript to monitor and display -->
-	<script src="../js/jquery.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="../js/jquery.tinysort.min.js"></script>
-	<script type="text/javascript" src="../js/tmpl.js"></script>
+	<script src="./js/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="./js/jquery.tinysort.min.js"></script>
+	<script type="text/javascript" src="./js/tmpl.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 	
-	<!-- HystrixCommand -->
-	<script type="text/javascript" src="../components/hystrixCommand/hystrixCommand.js"></script>
-	<link rel="stylesheet" type="text/css" href="../components/hystrixCommand/hystrixCommand.css" />
+	<!-- PollyCommand -->
+	<script type="text/javascript" src="./components/hystrixCommand.js"></script>
+	<link rel="stylesheet" type="text/css" href="./components/hystrixCommand.css" />
 	
-	<!-- HystrixThreadPool -->
-	<script type="text/javascript" src="../components/hystrixThreadPool/hystrixThreadPool.js"></script>
-	<link rel="stylesheet" type="text/css" href="../components/hystrixThreadPool/hystrixThreadPool.css" />
+	<!-- PollyThreadPool -->
+	<script type="text/javascript" src="./components/hystrixThreadPool.js"></script>
+	<link rel="stylesheet" type="text/css" href="./components/hystrixThreadPool.css" />
 
 </head>
 <body>
@@ -97,7 +97,8 @@
 					}
 				}
 
-				var proxyStream = "../proxy.stream?origin=" + origin;
+			    //var proxyStream = "./proxy.stream?origin=" + origin;
+				var proxyStream = origin;
 
 				// start the EventSource which will open a streaming connection to the server
 				var source = new EventSource(proxyStream);
@@ -137,7 +138,7 @@
 				return html +
 					'<div id="monitor">' +
 						'<div id="streamHeader">' +
-							'<h2><span id="' + title_name + '"></span>Hystrix Stream: ' + s.titleName + '</h2>' +
+							'<h2><span id="' + title_name + '"></span>Polly Stream: ' + s.titleName + '</h2>' +
 						'</div>' +
 						'<div class="container">' +
 							'<div class="row">' +
@@ -186,3 +187,4 @@
 	</script>
 </body>
 </html>
+x

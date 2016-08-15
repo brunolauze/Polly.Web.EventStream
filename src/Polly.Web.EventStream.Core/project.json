@@ -14,7 +14,7 @@
   },
   "buildOptions": {
     "outputName": "Polly.Web.EventStream",
-    "embed": [ "index.html", "index.css", "images/*", "css/*.css", "css/simplegrid/*.css", "js/*.js", "components/**/*.*" ]
+    "embed": [ "*.html", "*.css", "images/*", "css/*.css", "css/simplegrid/*.css", "js/*.js", "components/*.*" ]
   },
   "frameworks": {
     "net461": { },
