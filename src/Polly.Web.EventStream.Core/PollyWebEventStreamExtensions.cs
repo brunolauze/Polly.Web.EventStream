@@ -61,7 +61,7 @@ namespace Polly.Web.EventStream
             .UseFileServer(new FileServerOptions
             { 
                 RequestPath = "/polly.dashboard",
-                FileProvider = new Microsoft.Extensions.FileProviders.EmbeddedFileProvider(typeof(PollyWebEventStreamExtensions).GetTypeInfo().Assembly)
+                FileProvider = new Microsoft.Extensions.FileProviders.EmbeddedFileProvider(typeof(PollyWebEventStreamExtensions).GetTypeInfo().Assembly, "Polly.Web.EventStream.Core")
             });
         }
     }
