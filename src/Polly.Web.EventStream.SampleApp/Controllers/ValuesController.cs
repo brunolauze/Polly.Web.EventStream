@@ -37,9 +37,10 @@ namespace Polly.Web.EventStream.SampleApp.Controllers
         {
             var policy = _policyService.GetPolicy("/api/values");
             return await policy.ExecuteAsync<string>(
-                    async () => {
+                    async (cancellationToken) => {
                         if (id == 101) throw new ArgumentNullException();
-                        if (id == 102) await Task.Delay(8000);
+                        if (id == 102) await Task.Delay(8000, cancellationToken);
+                        await Task.Delay(id * 100, cancellationToken);
                         return await Task.FromResult($"value{id}");
                     }
                 );

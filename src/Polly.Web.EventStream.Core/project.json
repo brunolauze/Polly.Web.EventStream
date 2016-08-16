@@ -19,7 +19,10 @@
   "frameworks": {
     "net461": { },
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "buildOptions": {
+        "define": ["DOTNET"]
+      }
     }
   }
 }

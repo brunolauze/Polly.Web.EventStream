@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Polly.Configuration;
 using Polly.Metrics;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -45,12 +46,19 @@ namespace Polly.Web.EventStream
                     response.Headers.Add("Content-Type", "text/event-stream");
                     for (var i = 0; true; ++i)
                     {
+                        var metricItems = new List<IHealthMetrics>();
+                        await Task.Delay(2 * 1000);
                         foreach (var policy in PolicyRegistry.ResolveAll(configuration))
                         {
                             var metrics = service.GetMetrics(policy);
+                            metricItems.Add(metrics);
                             var payload = policy.ToJsonMetrics(metrics);
                             await response.WriteAsync($"data: {payload}\r\r");
+                            response.Body.Flush();
+                            await Task.Delay(2 * 1000);
                         }
+                        
+                        await response.WriteAsync($"data: {metricItems.ToJsonMetrics()}\r\r");
                         response.Body.Flush();
                         await Task.Delay(2 * 1000);
                     }

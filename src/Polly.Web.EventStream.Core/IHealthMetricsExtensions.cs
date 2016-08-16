@@ -15,6 +15,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Polly.Metrics;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
 
 namespace Polly.Web.EventStream
 {
@@ -27,6 +32,150 @@ namespace Polly.Web.EventStream
         /// The epoch
         /// </summary>
         private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+        
+        delegate void GetMinThreadsNative(out int workerThreads, out int completionPortThreads);
+        delegate void GetMaxThreadsNative(out int workerThreads, out int completionPortThreads);
+
+        private static readonly GetMinThreadsNative _getMinThreadsNative;
+        private static readonly GetMaxThreadsNative _getMaxThreadsNative;
+
+        static IHealthMetricsExtensions()
+        {
+#if !DOTNET
+            var getMinThreadsNativeMethod = typeof(ThreadPool).GetMethod("GetMinThreadsNative", BindingFlags.Static | BindingFlags.NonPublic);
+            _getMinThreadsNative = (GetMinThreadsNative)getMinThreadsNativeMethod.CreateDelegate(typeof(GetMinThreadsNative));
+            var getMaxThreadsNativeMethod = typeof(ThreadPool).GetMethod("GetMaxThreadsNative", BindingFlags.Static | BindingFlags.NonPublic);
+            _getMaxThreadsNative = (GetMaxThreadsNative)getMaxThreadsNativeMethod.CreateDelegate(typeof(GetMaxThreadsNative));
+#endif
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static string Type { get { return "HystrixThreadPool"; } }
+
+        public static int CurrentPoolSize
+        {
+            get
+            {
+#if !DOTNET
+                int workerThreads;
+                int completionPortThreads;
+                _getMinThreadsNative(out workerThreads, out completionPortThreads);
+                return workerThreads;
+#else
+                return 0;
+#endif
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int CurrentActiveCount
+        {
+            get
+            {
+                int count = 0;
+#if !DOTNET
+                foreach (ProcessThread thread in Process.GetCurrentProcess().Threads)
+                {
+                    if (thread.ThreadState == System.Diagnostics.ThreadState.Running)
+                    {
+                        count++;
+                    }
+                }
+#endif
+                return count;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int CurrentLargestPoolSize
+        {
+            get { return RollingMaxActiveThreads; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int CurrentCorePoolSize
+        {
+            get { return CurrentPoolSize; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int CurrentQueueSize
+        {
+            get { return 0; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int CurrentTaskCount
+        {
+            get { return 0; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int CurrentMaximumPoolSize
+        {
+            get { return CurrentLargestPoolSize; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int RollingMaxActiveThreads
+        {
+            get
+            {
+#if DOTNET
+                int workerThreads;
+                int completionPortThreads;
+                _getMaxThreadsNative(out workerThreads, out completionPortThreads);
+                return workerThreads;
+#else
+                return 0;
+#endif
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static string Name
+        {
+            get { return "dotnet"; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int QueueSizeRejectionThreshold { get { return 0; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int ReportingHosts { get { return 1; } }
+        
+
+
+        public static string ToJsonMetrics(this IEnumerable<IHealthMetrics> metrics)
+        {
+            var sum = metrics.Sum(x => x.RollingCountTotal);
+            var avg = metrics.Average(x => x.RollingStatisticalWindowInMilliseconds);
+            var currentCompletedTaskCount = metrics.Sum(x => x.CumulativeCountTotal);
+            return $"{{ \"currentPoolSize\": {CurrentPoolSize}, \"rollingMaxActiveThreads\": {RollingMaxActiveThreads}, \"currentActiveCount\": {CurrentActiveCount}, \"currentCompletedTaskCount\": {currentCompletedTaskCount},\"propertyValue_queueSizeRejectionThreshold\": {QueueSizeRejectionThreshold},\"type\": \"{Type}\", \"reportingHosts\": 1, \"propertyValue_metricsRollingStatisticalWindowInMilliseconds\": {avg}, \"name\": \"{Name}\", \"currentLargestPoolSize\": {CurrentLargestPoolSize}, \"currentCorePoolSize\": {CurrentCorePoolSize}, \"currentQueueSize\": {CurrentQueueSize},\"currentTaskCount\": {CurrentTaskCount},\"rollingCountThreadsExecuted\": {sum},\"currentMaximumPoolSize\": {CurrentMaximumPoolSize} }}";
+        }
+
 
         /// <summary>
         /// To the json metrics.
@@ -92,7 +241,7 @@ namespace Polly.Web.EventStream
                 new JProperty("propertyValue_circuitBreakerForceClosed", false),
                 new JProperty("propertyValue_circuitBreakerEnabled", policy.HasCircuitBreaker()),
                 new JProperty("propertyValue_executionIsolationStrategy", "SEMAPHORE"),
-                new JProperty("propertyValue_executionIsolationThreadTimeoutInMilliseconds", policy.HasTimeoutPolicy() ? 10000 : 0),
+                new JProperty("propertyValue_executionIsolationThreadTimeoutInMilliseconds", policy.HasTimeoutPolicy() ? 4000 : 0),
                 new JProperty("propertyValue_executionIsolationThreadInterruptOnTimeout", true),
                 new JProperty("propertyValue_executionIsolationThreadPoolKeyOverride", null),
                 new JProperty("propertyValue_executionIsolationSemaphoreMaxConcurrentRequests", 0),
