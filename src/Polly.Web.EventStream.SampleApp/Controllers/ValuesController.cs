@@ -41,6 +41,7 @@ namespace Polly.Web.EventStream.SampleApp.Controllers
                         if (id == 101) throw new ArgumentNullException();
                         if (id == 102) await Task.Delay(8000, cancellationToken);
                         await Task.Delay(id * 100, cancellationToken);
+                        cancellationToken.ThrowIfCancellationRequested();
                         return await Task.FromResult($"value{id}");
                     }
                 );
