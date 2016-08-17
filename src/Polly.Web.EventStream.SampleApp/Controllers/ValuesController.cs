@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Polly.Configuration;
@@ -35,7 +36,7 @@ namespace Polly.Web.EventStream.SampleApp.Controllers
         [HttpGet("{id}")]
         public async Task<string> Get(int id)
         {
-            var policy = _policyService.GetPolicy("/api/values");
+            var policy = _policyService.GetPolicy("/api/values/id");
             return await policy.ExecuteAsync<string>(
                     async (cancellationToken) => {
                         if (id == 101) throw new ArgumentNullException();
@@ -65,4 +66,15 @@ namespace Polly.Web.EventStream.SampleApp.Controllers
         {
         }
     }
+
+#if SUPPORTS_ASYNC
+
+    public class ValuesFallbackProvider : Polly.Configuration.IFallbackValueProvider
+    {
+        public async Task<object> ExecuteAsync(CancellationToken cancellationToken, Context context)
+        {
+            return await Task.FromResult(new string[] { "value0", "value-fallback0" });
+        }
+    }
+#endif
 }

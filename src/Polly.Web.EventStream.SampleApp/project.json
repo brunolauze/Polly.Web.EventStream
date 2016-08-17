@@ -27,6 +27,7 @@
 
   "buildOptions": {
     "emitEntryPoint": true,
+    "define": ["SUPPORTS_ASYNC", "PORTABLE"],
     "preserveCompilationContext": true
   },
 
